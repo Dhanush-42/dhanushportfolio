@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Palivela Sai Dhanush Raj | Software Engineer Portfolio</title>
+  
+  <!-- Font & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- jsPDF for direct instant resume download -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #07090e;
+      --card-bg: rgba(18, 24, 38, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --primary: #6366f1;
+      --primary-glow: rgba(99, 102, 241, 0.35);
+      --secondary: #06b6d4;
+      --accent: #10b981;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --radius: 16px;
+      --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      color-scheme: dark;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    #bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(7, 9, 14, 0.75);
+      transition: var(--transition);
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.1rem 0;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 1.35rem;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #fff 30%, var(--primary) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.8rem;
+      list-style: none;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .resume-btn {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #fff !important;
+      padding: 0.55rem 1.25rem;
+      border-radius: 999px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px var(--primary-glow);
+      transition: var(--transition);
+    }
+
+    .resume-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    }
+
+    section {
+      padding: 6.5rem 0 3rem;
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-title span {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .glass-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: var(--transition);
+    }
+
+    .glass-card:hover {
+      border-color: rgba(99, 102, 241, 0.35);
+      transform: translateY(-4px);
+    }
+
+    .hero {
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      padding-top: 5rem;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: #a5b4fc;
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.9); }
+    }
+
+    .hero h1 {
+      font-size: 3.4rem;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+      letter-spacing: -1.5px;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      max-width: 580px;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: #fff;
+      padding: 0.75rem 1.6rem;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      border: 1px solid var(--card-border);
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .terminal-card {
+      border: 1px solid var(--card-border);
+      background: #0b0f19;
+      border-radius: var(--radius);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      background: #141b2a;
+      padding: 0.8rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .t-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .t-red { background: #ef4444; }
+    .t-yellow { background: #eab308; }
+    .t-green { background: #22c55e; }
+
+    .terminal-title {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-left: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .terminal-body {
+      padding: 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.88rem;
+      color: #e2e8f0;
+      line-height: 1.7;
+    }
+
+    .term-key { color: var(--secondary); }
+    .term-str { color: #a5b4fc; }
+    .term-val { color: var(--accent); }
+
+    .timeline {
+      position: relative;
+      border-left: 2px solid rgba(255, 255, 255, 0.1);
+      margin-left: 1rem;
+      padding-left: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .timeline-item {
+      position: relative;
+    }
+
+    .timeline-marker {
+      position: absolute;
+      left: -2.6rem;
+      top: 0.2rem;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: 3px solid var(--bg);
+      box-shadow: 0 0 12px var(--primary);
+    }
+
+    .timeline-card {
+      padding: 1.5rem;
+    }
+
+    .t-meta {
+      display: flex;
+      justify-content: space-between;
+      color: var(--secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .t-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .t-sub {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .score-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 8px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-card {
+      padding: 1.8rem;
+    }
+
+    .skill-card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #fff;
+    }
+
+    .chip-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .chip {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .chip:hover {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .project-card {
+      padding: 2.2rem;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      background: linear-gradient(145deg, rgba(22, 28, 45, 0.65), rgba(13, 17, 27, 0.8));
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .project-tag {
+      padding: 0.3rem 0.8rem;
+      background: rgba(6, 182, 212, 0.15);
+      color: var(--secondary);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .project-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 1rem;
+    }
+
+    .project-desc {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 0.8rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.92rem;
+      color: #cbd5e1;
+    }
+
+    .feature-list li i {
+      color: var(--accent);
+      font-size: 0.8rem;
+    }
+
+    .cert-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.3rem;
+    }
+
+    .cert-card {
+      padding: 1.4rem;
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+    }
+
+    .cert-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--secondary);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .cert-info h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .cert-info p {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+    }
+
+    .cert-date {
+      display: inline-block;
+      font-size: 0.76rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--primary);
+      margin-top: 0.4rem;
+      font-weight: 600;
+    }
+
+    .profiles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-top: 2rem;
+    }
+
+    .profile-card {
+      padding: 1.5rem;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .profile-card i {
+      font-size: 2.2rem;
+      color: var(--secondary);
+    }
+
+    .profile-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 3rem 0;
+      margin-top: 5rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .contact-bar {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .contact-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+
+    .contact-item:hover {
+      color: var(--primary);
+    }
+
+    /* Toast Notification for Download Feedback */
+    #toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #1e1b4b;
+      color: #c7d2fe;
+      border: 1px solid var(--primary);
+      padding: 1rem 1.4rem;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 2.6rem; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Particle Animation Canvas -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Download Toast Alert -->
+  <div id="toast">
+    <i class="fa-solid fa-circle-check" style="color: var(--accent); font-size: 1.2rem;"></i>
+    <span>Generating and downloading resume PDF...</span>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="container nav-container">
+      <a href="#" class="logo">Dhanush.dev</a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#project">Projects</a></li>
+        <li><a href="#internships">Certificates</a></li>
+        <li><a href="#profiles">Coding Profiles</a></li>
+        <li>
+          <button class="resume-btn" onclick="downloadResume()">
+            <i class="fa-solid fa-file-arrow-down"></i> Resume
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="about">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="badge-pill">
+            <span class="status-dot"></span> Open for Software Engineering Opportunities
+          </div>
+          <h1>Hi, I'm Palivela<br><span style="background: linear-gradient(135deg, #6366f1, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Sai Dhanush Raj</span></h1>
+          <p>
+            Aspiring Software Engineer currently pursuing a B.Tech in Computer Science at Ideal Institute of Technology. Solid foundation in C/C++, Python, Java, and scalable web solutions with a strong focus on Data Structures and Algorithms.
+          </p>
+          <div class="hero-cta">
+            <button class="resume-btn" onclick="downloadResume()" style="font-size: 1rem; padding: 0.75rem 1.6rem;">
+              <i class="fa-solid fa-file-pdf"></i> Download Resume
+            </button>
+            <a href="mailto:dhanushraj0103@gmail.com" class="btn-secondary">
+              <i class="fa-solid fa-paper-plane"></i> Contact Me
+            </a>
+            <a href="https://github.com/Dhanush-42" target="_blank" class="btn-secondary">
+              <i class="fa-brands fa-github"></i> GitHub
+            </a>
+          </div>
+        </div>
+
+        <!-- Interactive Terminal Card -->
+        <div class="terminal-card">
+          <div class="terminal-header">
+            <div class="t-dot t-red"></div>
+            <div class="t-dot t-yellow"></div>
+            <div class="t-dot t-green"></div>
+            <span class="terminal-title">dhanush@portfolio ~ profile.json</span>
+          </div>
+          <div class="terminal-body">
+            <div><span class="term-key">"name"</span>: <span class="term-str">"Palivela Sai Dhanush Raj"</span>,</div>
+            <div><span class="term-key">"role"</span>: <span class="term-str">"Aspiring Software Engineer"</span>,</div>
+            <div><span class="term-key">"location"</span>: <span class="term-str">"Kakinada, Andhra Pradesh"</span>,</div>
+            <div><span class="term-key">"education"</span>: <span class="term-str">"B.Tech CSE (2023 - 2027)"</span>,</div>
+            <div><span class="term-key">"cgpa"</span>: <span class="term-val">7.50</span>,</div>
+            <div><span class="term-key">"contact"</span>: {</div>
+            <div style="padding-left: 1.5rem;"><span class="term-key">"email"</span>: <span class="term-str">"dhanushraj0103@gmail.com"</span>,</div>
+            <div style="padding-left: 1.5rem;"><span class="term-key">"phone"</span>: <span class="term-str">"+91 9381044755"</span></div>
+            <div>},</div>
+            <div><span class="term-key">"status"</span>: <span class="term-val">"Building scalable apps"</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Education Section -->
+  <section id="education">
+    <div class="container">
+      <h2 class="section-title"><i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> Educational <span>Qualifications</span></h2>
+      <p class="section-subtitle">Academic milestones shaping my computer science journey.</p>
+      
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="glass-card timeline-card">
+            <div class="t-meta">
+              <span>B.Tech - Computer Science & Engineering</span>
+              <span>2023 – 2027</span>
+            </div>
+            <div class="t-title">Ideal Institute of Technology</div>
+            <div class="t-sub"><i class="fa-solid fa-location-dot"></i> Kakinada, Andhra Pradesh</div>
+            <span class="score-badge">CGPA: 7.50</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="glass-card timeline-card">
+            <div class="t-meta">
+              <span>Intermediate (Class XII)</span>
+              <span>2021 – 2023</span>
+            </div>
+            <div class="t-title">Aditya Junior College</div>
+            <div class="t-sub"><i class="fa-solid fa-location-dot"></i> Kakinada</div>
+            <span class="score-badge">Score: 55%</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="glass-card timeline-card">
+            <div class="t-meta">
+              <span>High School (Class X)</span>
+              <span>2020 – 2021</span>
+            </div>
+            <div class="t-title">Aditya Public School</div>
+            <div class="t-sub"><i class="fa-solid fa-location-dot"></i> Kakinada</div>
+            <span class="score-badge">CGPA: 10.0 / 10.0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Technical & Soft Skills -->
+  <section id="skills">
+    <div class="container">
+      <h2 class="section-title"><i class="fa-solid fa-code" style="color: var(--secondary);"></i> Technical & <span>Core Skills</span></h2>
+      <p class="section-subtitle">Core languages, engineering fundamentals, and creative tools.</p>
+
+      <div class="skills-grid">
+        <div class="glass-card skill-card">
+          <h3><i class="fa-solid fa-terminal" style="color: var(--secondary);"></i> Programming Languages</h3>
+          <div class="chip-cloud">
+            <span class="chip">C / C++</span>
+            <span class="chip">Python</span>
+            <span class="chip">Java (EE)</span>
+            <span class="chip">HTML5 / CSS3</span>
+            <span class="chip">JavaScript</span>
+            <span class="chip">SQL</span>
+          </div>
+        </div>
+
+        <div class="glass-card skill-card">
+          <h3><i class="fa-solid fa-brain" style="color: var(--primary);"></i> Core CS Concepts</h3>
+          <div class="chip-cloud">
+            <span class="chip">Data Structures</span>
+            <span class="chip">Algorithms</span>
+            <span class="chip">Problem Solving</span>
+            <span class="chip">System Admin (RH124)</span>
+            <span class="chip">Network Fundamentals</span>
+            <span class="chip">Cybersecurity</span>
+          </div>
+        </div>
+
+        <div class="glass-card skill-card">
+          <h3><i class="fa-solid fa-pen-ruler" style="color: var(--accent);"></i> Design & Development</h3>
+          <div class="chip-cloud">
+            <span class="chip">UI/UX Basics</span>
+            <span class="chip">Accessible Design</span>
+            <span class="chip">Responsive Web</span>
+            <span class="chip">Full Stack Integration</span>
+            <span class="chip">Clean Wireframing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Academic Project -->
+  <section id="project">
+    <div class="container">
+      <h2 class="section-title"><i class="fa-solid fa-layer-group" style="color: var(--primary);"></i> Featured <span>Project</span></h2>
+      <p class="section-subtitle">Real-world systems engineered for institutional scalability.</p>
+
+      <div class="glass-card project-card">
+        <div class="project-header">
+          <span class="project-tag"><i class="fa-solid fa-shield-halved"></i> Institutional Role-Based Portal</span>
+          <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--text-muted);">
+            Production Architecture
+          </div>
+        </div>
+        <h3 class="project-title">File Access Portal for College Students & Faculty</h3>
+        <p class="project-desc">
+          A comprehensive and secure file sharing portal connecting students and faculty. Features role-based registration, automated expiration for temporary resources, and administrative review gates to enforce safety and clean storage.
+        </p>
+
+        <ul class="feature-list">
+          <li><i class="fa-solid fa-check"></i> <strong>Roll Number Authentication:</strong> Direct student authorization and identity validation.</li>
+          <li><i class="fa-solid fa-check"></i> <strong>Categorized Uploads:</strong> Faculty uploads organized seamlessly by academic branch and year.</li>
+          <li><i class="fa-solid fa-check"></i> <strong>15-Minute Expiration:</strong> Auto-purging temporary file link lifecycles to preserve storage.</li>
+          <li><i class="fa-solid fa-check"></i> <strong>Admin Approval Gate:</strong> Moderation queue to inspect, approve, or reject shared academic files.</li>
+        </ul>
+
+        <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+          <span class="chip" style="background: rgba(99, 102, 241, 0.15); border-color: var(--primary);">Access Management</span>
+          <span class="chip" style="background: rgba(99, 102, 241, 0.15); border-color: var(--primary);">Lifecycle Auto-Delete</span>
+          <span class="chip" style="background: rgba(99, 102, 241, 0.15); border-color: var(--primary);">Admin Queue</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Internships & Certifications -->
+  <section id="internships">
+    <div class="container">
+      <h2 class="section-title"><i class="fa-solid fa-award" style="color: var(--accent);"></i> Internships & <span>Certifications</span></h2>
+      <p class="section-subtitle">Verified virtual internships, industrial certifications, and Red Hat credentials.</p>
+
+      <div class="cert-grid">
+        <div class="glass-card cert-card">
+          <div class="cert-icon"><i class="fa-solid fa-shield-cat"></i></div>
+          <div class="cert-info">
+            <h4>Introduction to Cybersecurity</h4>
+            <p>Cisco Networking Academy</p>
+            <span class="cert-date">May 28, 2026</span>
+          </div>
+        </div>
+
+        <div class="glass-card cert-card">
+          <div class="cert-icon"><i class="fa-brands fa-redhat" style="color: #ef4444;"></i></div>
+          <div class="cert-info">
+            <h4>Application Development I: Java EE (AD183)</h4>
+            <p>Red Hat Academy</p>
+            <span class="cert-date">May 2026</span>
+          </div>
+        </div>
+
+        <div class="glass-card cert-card">
+          <div class="cert-icon"><i class="fa-brands fa-python"></i></div>
+          <div class="cert-info">
+            <h4>Python Full Stack Developer</h4>
+            <p>Industrial Internship Training</p>
+            <span class="cert-date">Jan – Mar 2026</span>
+          </div>
+        </div>
+
+        <div class="glass-card cert-card">
+          <div class="cert-icon"><i class="fa-solid fa-server"></i></div>
+          <div class="cert-info">
+            <h4>Red Hat System Administration (RH124)</h4>
+            <p>Red Hat Academy</p>
+            <span class="cert-date">Sep 24, 2025</span>
+          </div>
+        </div>
+
+        <div class="glass-card cert-card">
+          <div class="cert-icon"><i class="fa-solid fa-robot"></i></div>
+          <div class="cert-info">
+            <h4>Introduction to Modern AI</h4>
+            <p>Cisco</p>
+            <span class="cert-date">Dec 31, 2025</span>
+          </div>
+        </div>
+
+        <div class="glass-card cert-card">
+          <div class="cert-icon"><i class="fa-solid fa-network-wired"></i></div>
+          <div class="cert-info">
+            <h4>Networking Basics</h4>
+            <p>Cisco</p>
+            <span class="cert-date">Dec 31, 2025</span>
+          </div>
+        </div>
+
+        <div class="glass-card cert-card">
+          <div class="cert-icon"><i class="fa-brands fa-java"></i></div>
+          <div class="cert-info">
+            <h4>Java Full Stack Developer / Eligo</h4>
+            <p>Virtual Internship & Training</p>
+            <span class="cert-date">Oct – Dec 2025</span>
+          </div>
+        </div>
+
+        <div class="glass-card cert-card">
+          <div class="cert-icon"><i class="fa-solid fa-microchip"></i></div>
+          <div class="cert-info">
+            <h4>AI-ML Virtual Internship</h4>
+            <p>Industrial Skill Program</p>
+            <span class="cert-date">Jul – Sep 2025</span>
+          </div>
+        </div>
+
+        <div class="glass-card cert-card">
+          <div class="cert-icon"><i class="fa-solid fa-globe"></i></div>
+          <div class="cert-info">
+            <h4>Web Full Stack Developer</h4>
+            <p>Virtual Internship</p>
+            <span class="cert-date">Oct – Dec 2024</span>
+          </div>
+        </div>
+
+        <div class="glass-card cert-card">
+          <div class="cert-icon"><i class="fa-solid fa-database"></i></div>
+          <div class="cert-info">
+            <h4>Data Engineering Internship</h4>
+            <p>Virtual Skill Track</p>
+            <span class="cert-date">Jul – Sep 2024</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Profiles & Competitive Coding -->
+  <section id="profiles">
+    <div class="container">
+      <h2 class="section-title"><i class="fa-solid fa-trophy" style="color: #eab308;"></i> Competitive <span>Profiles</span></h2>
+      <p class="section-subtitle">Verified problem-solving handles and source repositories.</p>
+
+      <div class="profiles-grid">
+        <a href="https://leetcode.com/u/236K1A0542/" target="_blank" class="glass-card profile-card">
+          <i class="fa-solid fa-code"></i>
+          <strong>LeetCode</strong>
+          <span class="profile-id">@236K1A0542</span>
+        </a>
+
+        <a href="https://www.hackerrank.com/profile/236K1A0542" target="_blank" class="glass-card profile-card">
+          <i class="fa-brands fa-hackerrank" style="color: #10b981;"></i>
+          <strong>HackerRank</strong>
+          <span class="profile-id">@236K1A0542</span>
+        </a>
+
+        <a href="https://github.com/Dhanush-42" target="_blank" class="glass-card profile-card">
+          <i class="fa-brands fa-github"></i>
+          <strong>GitHub</strong>
+          <span class="profile-id">@Dhanush-42</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="contact-bar">
+        <a href="mailto:dhanushraj0103@gmail.com" class="contact-item">
+          <i class="fa-solid fa-envelope"></i> dhanushraj0103@gmail.com
+        </a>
+        <a href="tel:9381044755" class="contact-item">
+          <i class="fa-solid fa-phone"></i> +91 9381044755
+        </a>
+        <span class="contact-item">
+          <i class="fa-solid fa-location-dot"></i> Kakinada, Andhra Pradesh
+        </span>
+      </div>
+      <p>&copy; 2026 Palivela Sai Dhanush Raj. Built with responsive glassmorphic UI and interactive canvas physics.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Direct PDF generator function on Download button click
+    function downloadResume() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3500);
+
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      // Palette
+      const primary = [30, 41, 59];
+      const accent = [79, 70, 229];
+      const gray = [100, 116, 139];
+
+      // Header
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(20);
+      doc.setTextColor(...primary);
+      doc.text("PALIVELA SAI DHANUSH RAJ", 20, 22);
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(11);
+      doc.setTextColor(...accent);
+      doc.text("Aspiring Software Engineer | B.Tech CSE (2023 - 2027)", 20, 29);
+
+      doc.setFontSize(9.5);
+      doc.setTextColor(...gray);
+      doc.text("Kakinada, Andhra Pradesh | +91 9381044755 | dhanushraj0103@gmail.com", 20, 35);
+      doc.text("GitHub: Dhanush-42 | LeetCode: 236K1A0542 | HackerRank: 236K1A0542", 20, 40);
+
+      doc.setDrawColor(226, 232, 240);
+      doc.setLineWidth(0.5);
+      doc.line(20, 44, 190, 44);
+
+      let y = 52;
+      function addSectionTitle(title) {
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(12);
+        doc.setTextColor(...accent);
+        doc.text(title.toUpperCase(), 20, y);
+        doc.line(20, y + 2, 190, y + 2);
+        y += 8;
+      }
+
+      // Professional Summary
+      addSectionTitle("Professional Summary");
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9.5);
+      doc.setTextColor(50, 50, 50);
+      const summaryText = "Aspiring Software Engineer currently pursuing a B.Tech in Computer Science at Ideal Institute of Technology. Possesses a solid foundation in programming languages such as C/C++, Python, and Java. Eager to learn and grow in the field of software development with a keen focus on data structures, algorithms, and practical web applications.";
+      const splitSummary = doc.splitTextToSize(summaryText, 170);
+      doc.text(splitSummary, 20, y);
+      y += splitSummary.length * 5 + 5;
+
+      // Education
+      addSectionTitle("Education");
+      const edu = [
+        { deg: "B.Tech - Computer Science & Engineering", inst: "Ideal Institute of Technology, Kakinada", yr: "2023 - 2027", score: "CGPA: 7.50" },
+        { deg: "Intermediate (Class XII)", inst: "Aditya Junior College, Kakinada", yr: "2021 - 2023", score: "Score: 55%" },
+        { deg: "High School (Class X)", inst: "Aditya Public School, Kakinada", yr: "2020 - 2021", score: "CGPA: 10.0" }
+      ];
+      edu.forEach(item => {
+        doc.setFont("helvetica", "bold");
+        doc.text(item.deg, 20, y);
+        doc.setFont("helvetica", "normal");
+        doc.text(item.yr, 165, y);
+        y += 4.5;
+        doc.setTextColor(...gray);
+        doc.text(item.inst + "  |  " + item.score, 20, y);
+        doc.setTextColor(50, 50, 50);
+        y += 6;
+      });
+      y += 2;
+
+      // Technical Skills
+      addSectionTitle("Technical Skills");
+      doc.setFont("helvetica", "bold");
+      doc.text("Languages: ", 20, y);
+      doc.setFont("helvetica", "normal");
+      doc.text("C, C++, Python, Java (EE), HTML, CSS, JavaScript, SQL", 46, y);
+      y += 5;
+
+      doc.setFont("helvetica", "bold");
+      doc.text("Core Concepts: ", 20, y);
+      doc.setFont("helvetica", "normal");
+      doc.text("Data Structures, Algorithms, Problem Solving, Networking, UI/UX Basics", 52, y);
+      y += 8;
+
+      // Key Projects
+      addSectionTitle("Academic & Technical Projects");
+      doc.setFont("helvetica", "bold");
+      doc.text("File Access Portal for College Students and Faculty", 20, y);
+      y += 4.5;
+      doc.setFont("helvetica", "normal");
+      const projDesc = "Engineered a secure role-based portal for sharing academic documents. Implemented student authentication via Roll Number, faculty branch/year categorization, automated 15-minute temporary file link expiration, and an admin moderation queue.";
+      const splitProj = doc.splitTextToSize(projDesc, 170);
+      doc.text(splitProj, 20, y);
+      y += splitProj.length * 5 + 6;
+
+      // Certifications & Internships
+      addSectionTitle("Certifications & Internships");
+      const certs = [
+        "Introduction to Cybersecurity (Cisco) - May 2026",
+        "Red Hat Application Development I: Programming in Java EE (AD183) - May 2026",
+        "Python Full Stack Developer Internship - Jan to Mar 2026",
+        "Red Hat System Administration (RH124 - RHA) - Sep 2025",
+        "Cisco Introduction to Modern AI & Networking Basics - Dec 2025",
+        "Java Full Stack Developer / Eligo Short Internship - Oct to Dec 2025",
+        "AI-ML Virtual Internship & Data Analytics Essentials - Jul to Oct 2025",
+        "Web Full Stack & Data Engineering Virtual Internships - Jul to Dec 2024"
+      ];
+      certs.forEach(c => {
+        doc.circle(22, y - 1, 0.7, 'F');
+        doc.text(c, 26, y);
+        y += 5;
+      });
+
+      // Save the generated document
+      doc.save("Palivela_Sai_Dhanush_Raj_Resume.pdf");
+    }
+
+    // Interactive Particle Background
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+    let particles = [];
+    const count = Math.floor(width / 22);
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+
+    const mouse = { x: null, y: null, radius: 140 };
+    window.addEventListener('mousemove', (e) => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.7;
+        this.vy = (Math.random() - 0.5) * 0.7;
+        this.size = Math.random() * 2 + 1;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
+        if (mouse.x != null && mouse.y != null) {
+          let dx = mouse.x - this.x;
+          let dy = mouse.y - this.y;
+          let dist = Math.hypot(dx, dy);
+          if (dist < mouse.radius) {
+            let angle = Math.atan2(dy, dx);
+            let force = (mouse.radius - dist) / mouse.radius;
+            this.x -= Math.cos(angle) * force * 2.5;
+            this.y -= Math.sin(angle) * force * 2.5;
+          }
+        }
+      }
+      draw() {
+        ctx.fillStyle = 'rgba(99, 102, 241, 0.45)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < count; i++) particles.push(new Particle());
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+        for (let j = i + 1; j < particles.length; j++) {
+          let dx = particles[i].x - particles[j].x;
+          let dy = particles[i].y - particles[j].y;
+          let dist = Math.hypot(dx, dy);
+          if (dist < 110) {
+            ctx.strokeStyle = `rgba(99, 102, 241, ${0.18 * (1 - dist / 110)})`;
+            ctx.lineWidth = 0.8;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>
